@@ -19,6 +19,6 @@
     "nodemon": "^3.0.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "prisma": "^5.6.0"
+    "prisma": "^5.7.0"
   }
 }
