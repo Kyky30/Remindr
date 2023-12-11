@@ -25,3 +25,17 @@ model Session {
   user      User      @relation(fields: [userId], references: [id])
   createdAt DateTime  @default(now())
 }
+
+model Groupe {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique      
+  createdAt DateTime  @default(now())
+}
+
+model GroupeMember {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [user], references: [id])
+  groupeId  Int
+  groupe    Groupe    @relation(fields: [groupeId], references: [id])
+  createdAt DateTime  @default(now())
+}
