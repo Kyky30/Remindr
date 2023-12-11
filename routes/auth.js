@@ -15,7 +15,7 @@ passport.use(
     });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return done(null, false, { message: 'Invalid credentials' });
+      return done(null, false, { message: 'Identifiants ou mot de passe invalide  ' });
     }
 
     return done(null, user);
@@ -35,7 +35,7 @@ passport.deserializeUser(async (id, done) => {
 
 // Routes
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login',{ message: req.flash('error') });
 });
 
 router.post(
