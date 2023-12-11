@@ -22,9 +22,10 @@ app.use(flash());
 // Configuration de la session
 app.use(
   session({
-    secret: 'your-secret-key',
+    secret: 'ma-cle-de-securite-super-securisee',
     resave: false,
     saveUninitialized: true,
+    maxAge: 5000, // 2 secondes
   })
 );
 
