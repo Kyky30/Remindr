@@ -18,6 +18,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(flash());
+// Middleware pour les fichiers statiques
+app.use(express.static('public'));
 
 // Configuration de la session
 app.use(
@@ -44,8 +46,9 @@ const checkAuth = (req, res, next) => {
 app.use('/', authRoutes);
 
 app.get('/', checkAuth, (req, res) => {
-  res.render('dashboard', { user: req.user });
+  res.render('dashboard', { user: req.user.username });
 });
+
 
 // Port d'écoute
 const PORT = process.env.PORT || 3000;
