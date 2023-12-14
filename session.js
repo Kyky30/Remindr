@@ -11,7 +11,7 @@ module.exports = function (app) {
       resave: false,
       saveUninitialized: true,
       cookie: {
-        maxAge: 3600000, // 1 heure
+        maxAge: 3000, // 1 heure
       },
     })
   );

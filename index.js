@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
     return res.redirect('/dashboard');
   }
   // Sinon, affichez la page d'accueil
-  res.render('home');
+  res.render('login');
 });
 
 // Définir la route de vérification d'authentification avant la route /login
