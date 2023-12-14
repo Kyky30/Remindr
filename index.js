@@ -75,14 +75,10 @@ app.get('/', (req, res) => {
 // Définir la route de vérification d'authentification avant la route /login
 app.get('/dashboard', checkAuth, (req, res) => {
   res.render('dashboard', { user: req.user.username });
+});
 // Routes
-app.use('/', authRoutes);
 app.use('/creategroup', createGroupRoutes);
 
-
-app.get('/', checkAuth, (req, res) => {
-  res.render('dashboard', { user: req.user.username, });
-});
 
 app.get('/login', (req, res) => {
   // Si l'utilisateur est connecté, redirigez vers le dashboard
