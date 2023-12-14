@@ -1,12 +1,17 @@
-<h1>Bienvenu {{user}}</h1>
-    <button id="openModalBtn">Créer un groupe</button>
+<!-- dashboard.handlebars -->
 
-    <div id="ModalCreateGroup" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModalBtn">&times;</span>
-            <input type="text" id="textInput" placeholder="Entrez le nom du groupe">
-            <button id="confirmBtn">Créer</button>
-        </div>
+<h1>Bienvenue {{user}}</h1>
+<button id="openModalBtn">Créer un groupe</button>
+
+<div id="ModalCreateGroup" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModalBtn">&times;</span>
+        <form action="/creategroup" method="post">
+            <label for="groupName">Nom du groupe:</label>
+            <input type="text" id="groupName" name="groupName" placeholder="Entrez le nom du groupe" required>
+            <button type="submit" id="confirmBtn">Créer</button>
+        </form>
     </div>
+</div>
 
 <script src="/js/dashboard.js"></script>

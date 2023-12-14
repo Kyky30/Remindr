@@ -6,6 +6,7 @@ const {engine} = require('express-handlebars'); // Assurez-vous que c'est correc
 const path = require('path');
 
 const authRoutes = require('./routes/auth');
+const createGroupRoutes = require('./routes/newGroup');
 
 const flash = require('express-flash');
 
@@ -45,9 +46,11 @@ const checkAuth = (req, res, next) => {
 
 // Routes
 app.use('/', authRoutes);
+app.use('/creategroup', createGroupRoutes);
+
 
 app.get('/', checkAuth, (req, res) => {
-  res.render('dashboard', { user: req.user.username });
+  res.render('dashboard', { user: req.user.username, });
 });
 
 
