@@ -11,7 +11,7 @@ module.exports = function (app) {
       resave: false,
       saveUninitialized: true,
       cookie: {
-        maxAge: 5000, // Durée de la session en millisecondes (par exemple, 5 secondes)
+        maxAge: 3600000, // 1 heure
       },
     })
   );
@@ -19,4 +19,14 @@ module.exports = function (app) {
   // Initialiser Passport
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Sérialisation de l'utilisateur pour la session
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  // Désérialisation de l'utilisateur
+  passport.deserializeUser((user, done) => {
+    done(null, user);
+  });
 };
