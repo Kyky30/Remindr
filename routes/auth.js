@@ -1,78 +1,51 @@
+// routes/auth.js
+
 const express = require('express');
 const passport = require('passport');
-const { PrismaClient } = require('@prisma/client');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-
+const GitHubStrategy = require('passport-github').Strategy;
 const router = express.Router();
-const prisma = new PrismaClient();
 
-// Passport Configuration
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    const user = await prisma.user.findUnique({
-      where: { username },
-    });
+// Configurations GitHub
+passport.use(new GitHubStrategy({
+  clientID: '29bb2667a5a3ba5cc4f7',
+  clientSecret: 'e1b0620f5b5fe2f43657d950594cfc4d61fa1c14',
+  callbackURL: 'http://localhost:3000/auth/github/callback',
+}, (accessToken, refreshToken, profile, done) => {
+  // Vous pouvez enregistrer ou récupérer l'utilisateur ici
+  return done(null, profile);
+}));
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return done(null, false, { message: 'Invalid credentials' });
-    }
-
-    return done(null, user);
-  })
-);
-
+// Sérialisation de l'utilisateur
 passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  const user = await prisma.user.findUnique({
-    where: { id: parseInt(id, 10) },
-  });
   done(null, user);
 });
 
-// Routes
-router.get('/login', (req, res) => {
-  res.render('login');
+// Désérialisation de l'utilisateur
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true,
-  })
-);
-
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
-});
-
-router.get('/register', (req, res) => {
-  res.render('register');
-});
-
-router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: { username, email, password: hashedPassword },
-    });
-
-    req.login(user, (err) => {
-      if (err) throw err;
-      res.redirect('/');
-    });
-  } catch (error) {
-    res.render('register', { error: 'Registration failed' });
+// Middleware pour vérifier l'authentification de l'utilisateur
+const checkAuth = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
   }
-});
+  next();
+};
+
+// Routes
+
+// Ajoutez la route GitHub pour l'authentification
+router.get('/auth/github',
+  passport.authenticate('github'));
+
+router.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Redirigez l'utilisateur vers le tableau de bord après une connexion réussie
+    res.redirect('/dashboard');
+  });
+
+// ...
 
 module.exports = router;

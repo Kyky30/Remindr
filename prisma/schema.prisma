@@ -10,34 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  createdAt    DateTime       @default(now())
-  sessions     Session[]
-  GroupeMember GroupeMember[]
+  id       Int        @id @default(autoincrement())
+  username String     @unique
+  email    String     @unique
+  password String
+  createdAt DateTime   @default(now())
+  sessions Session[]
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
 }
 
 model Groupe {
-  id           Int            @id @default(autoincrement())
-  name         String         @unique
-  createdAt    DateTime       @default(now())
-  GroupeMember GroupeMember[]
+  id        Int       @id @default(autoincrement())
+  name      String    @unique      
+  createdAt DateTime  @default(now())
 }
 
 model GroupeMember {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
   groupeId  Int
   groupe    Groupe   @relation(fields: [groupeId], references: [id])
   createdAt DateTime @default(now())

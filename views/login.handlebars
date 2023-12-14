@@ -1,7 +1,7 @@
 <!-- views/login.handlebars -->
 <h1>Login</h1>
-{{#if error}}
-  <p style="color: red;">{{error}}</p>
+{{#if message}}
+  <p style="color: red;">{{message}}</p>
 {{/if}}
 <form method="post" action="/login">
   <label for="username">Username:</label>
