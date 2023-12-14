@@ -1,5 +1,8 @@
 # Remindr
 # NodeJS project
+![Sans titre](https://github.com/KyyLvynic/Remindr/assets/70102690/36f4cdc3-f307-439d-bda2-dc8652facdf0)
+
+
 
 ### **Sujet d'évaluation : Application de gestion de rappels - Remindr**
 
