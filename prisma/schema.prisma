@@ -24,6 +24,7 @@ model Groupe {
   name         String         @unique
   createdAt    DateTime       @default(now())
   GroupeMember GroupeMember[]
+  Rappel       Rappel[]
 }
 
 model GroupeMember {
@@ -35,3 +36,12 @@ model GroupeMember {
   createdAt DateTime @default(now())
 }
 
+model Rappel {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String    
+  groupeId      Int
+  dateecheance  DateTime
+  heureecheance DateTime
+  groupe        Groupe    @relation(fields: [groupeId], references: [id])
+}
