@@ -29,6 +29,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/', authRoutes);
+app.use('/creategroup', createGroupRoutes);
 
 // Authentification GitHub
 app.get('/auth/github', passport.authenticate('github'));
@@ -45,7 +46,7 @@ app.get('/auth/github/callback',
 ///////////////////////////////////////////////////////////////////
 const checkAuth = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.redirect('/login');
+    return res.redirect('/');
   }
 
   // Session expire ?
@@ -76,9 +77,6 @@ app.get('/', (req, res) => {
 app.get('/dashboard', checkAuth, (req, res) => {
   res.render('dashboard', { user: req.user.username });
 });
-// Routes
-app.use('/creategroup', createGroupRoutes);
-
 
 app.get('/login', (req, res) => {
   // Si l'utilisateur est connecté, redirigez vers le dashboard
