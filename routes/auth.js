@@ -25,21 +25,37 @@ passport.use(
 
 passport.use(new GitHubStrategy({
   clientID: '29bb2667a5a3ba5cc4f7',
-  clientSecret: 'e1b0620f5b5fe2f43657d950594cfc4d61fa1c14',
+  clientSecret: '345c42505bf2a76ea00c17936a3e6d16f4fdab36',
   callbackURL: 'http://localhost:3000/auth/github/callback',
 }, (accessToken, refreshToken, profile, done) => {
-  // Enregistrez ou récupérez l'utilisateur ici, vous pouvez utiliser prisma pour cela
+  // Vous pouvez enregistrer ou récupérer l'utilisateur ici
   return done(null, profile);
 }));
 
+// passport.serializeUser((user, done) => {
+//   done(null, user ? user.id : null);
+// });
+
+
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await prisma.user.findUnique({
+//       where: { id: parseInt(id, 10) },
+//     });
+
+//     done(null, user);
+//   } catch (error) {
+//     done(error, null);
+//   }
+// });
+
+// Sérialisation de l'utilisateur
 passport.serializeUser((user, done) => {
-  done(null, user.id || user.username); // Utilisez une propriété unique pour identifier l'utilisateur
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-  const user = await prisma.user.findUnique({
-    where: { id: parseInt(id, 10) },
-  });
+// Désérialisation de l'utilisateur
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
@@ -59,7 +75,6 @@ const checkAuth = (req, res, next) => {
 
   next();
 };
-
 // Routes
 
 // Authentification locale
@@ -81,16 +96,51 @@ router.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
-// Authentification GitHub
+// Ajoutez la route GitHub pour l'authentification
 router.get('/auth/github',
   passport.authenticate('github'));
 
 router.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Redirigez l'utilisateur vers le tableau de bord après une connexion réussie
-    res.redirect('/dashboard');
+  async (req, res) => {
+    try {
+      const githubLogin = req.user.username;
+
+      const existingUser = await prisma.user.findUnique({
+        where: { githubLogin },
+      });
+
+      if (existingUser) {
+        // User already exists, log in the user
+        req.login(existingUser, (err) => {
+          if (err) throw err;
+          res.redirect('/dashboard');
+        });
+      } else {
+        // User doesn't exist, create a new GitHub user in the database
+        const newUser = await prisma.user.create({
+          data: {
+            githubLogin,
+            isGitHubUser: true,
+            // You can leave the password empty or set a placeholder value
+            password: '', // or password: 'github-user'
+            username: req.user.username,
+            // Add any other necessary user information from the GitHub profile
+          },
+        });
+
+        // Log in the newly created user
+        req.login(newUser, (err) => {
+          if (err) throw err;
+          res.redirect('/dashboard');
+        });
+      }
+    } catch (error) {
+      console.error('Error during GitHub authentication callback:', error);
+      res.redirect('/login');
+    }
   });
+
 
 // Enregistrement
 router.get('/register', (req, res) => {
@@ -99,6 +149,11 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
+
+  // Check if the password is provided
+  if (!password) {
+    return res.render('register', { error: 'Password is required' });
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -116,5 +171,5 @@ router.post('/register', async (req, res) => {
   }
 });
 
-module.exports = router, checkAuth;
 
+module.exports = { router, checkAuth };

@@ -5,9 +5,10 @@ const path = require('path');
 const sessionConfig = require('./session'); // Importez le fichier session.js
 const passport = require('passport');
 
-const authRoutes = require('./routes/auth'); // Importez le fichier auth.js
 const createGroupRoutes = require('./routes/newGroup'); // Importez le fichier newGroup.js
 const dashboardRoutes = require('./routes/dashboard'); // Importez le fichier dashboard.js
+const { router: authRoutes, checkAuth } = require('./routes/auth');
+
 
 const flash = require('express-flash');
 
@@ -32,7 +33,7 @@ app.use(passport.session());
 // Routes
 app.use('/', authRoutes);
 app.use('/creategroup', createGroupRoutes);
-app.use('/dashboard', dashboardRoutes);
+app.use('/dashboard',checkAuth , dashboardRoutes);
 
 // Authentification GitHub
 app.get('/auth/github', passport.authenticate('github'));
@@ -51,15 +52,17 @@ app.get('/auth/github/callback',
 app.get('/', (req, res) => {
   // Si l'utilisateur est connecté, redirigez vers le dashboard
   if (req.isAuthenticated()) {
+    console.log(req.isAuthenticated());
     return res.redirect('/dashboard');
   }
   // Sinon, affichez la page d'accueil
+  console.log("etape merde", req.isAuthenticated(), req.user);
   res.render('login');
 });
 
 // // Définir la route de vérification d'authentification avant la route /login
 // app.get('/dashboard', checkAuth, (req, res) => {
-//   res.render('dashboard', { user: req.user.username });
+//   res.render('dashboard', { user: req.user.id });
 // });
 
 app.get('/login', (req, res) => {
@@ -68,6 +71,7 @@ app.get('/login', (req, res) => {
     return res.redirect('/dashboard');
   }
   // Sinon, affichez la page de connexion
+  confirm.log("etape merde");
   res.render('login');
 });
 

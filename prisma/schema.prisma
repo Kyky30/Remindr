@@ -11,13 +11,16 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  createdAt    DateTime       @default(now())
-  GroupeMember GroupeMember[]
+  id             Int            @id @default(autoincrement())
+  username       String?        @unique
+  email          String?        @unique
+  password       String?        // Allow nullable password for users with GitHub login
+  githubLogin    String?        @unique
+  isGitHubUser   Boolean?       @default(false) // Indicates if the user is a GitHub user
+  createdAt      DateTime       @default(now())
+  GroupeMember   GroupeMember[]
 }
+
 
 model Groupe {
   id           Int            @id @default(autoincrement())
