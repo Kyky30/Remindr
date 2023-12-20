@@ -46,8 +46,17 @@ passport.deserializeUser(async (id, done) => {
 // Middleware pour vérifier l'authentification de l'utilisateur
 const checkAuth = (req, res, next) => {
   if (!req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+
+  // Session expire ?
+  const currentTime = new Date().getTime();
+  const sessionExpirationTime = req.session.cookie.expires.getTime();
+  if (currentTime > sessionExpirationTime) {
+    req.logout(); // Déconnecter l'utilisateur
     return res.redirect('/login');
   }
+
   next();
 };
 
@@ -107,4 +116,5 @@ router.post('/register', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router, checkAuth;
+

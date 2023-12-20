@@ -1,6 +1,18 @@
 <!-- dashboard.handlebars -->
 <button id="openModalBtn">Créer un groupe</button>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Sélectionner par groupes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each groups}}
+            <tr>
+                <td><a href="/group/{{this.id}}">{{this.name}}</a></td>
+            </tr>
+            {{/each}}
+    </table>
 <div id="ModalCreateGroup" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModalBtn">&times;</span>

@@ -4,18 +4,34 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Utilisez le middleware body-parser pour analyser le corps de la demande
+// Utilize the body-parser middleware to parse the request body
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.post('/', async (req, res) => {
     try {
         const { groupName } = req.body;
+
+        // Get the user ID (you may have your own way of obtaining this)
+        const userId = req.user.id;
+
+        // Create the group
         const createdGroup = await prisma.groupe.create({
             data: {
                 name: groupName,
+                // Add the user as a group member
+                GroupeMember: {
+                    create: {
+                        userId: userId,
+                    },
+                },
+            },
+            // Include the GroupeMember relation in the response
+            include: {
+                GroupeMember: true,
             },
         });
 
+        // Redirect or send a response as needed
         res.redirect('/');
     } catch (error) {
         console.error('Error creating group:', error);
