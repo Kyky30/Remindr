@@ -1,5 +1,6 @@
 <!-- dashboard.handlebars -->
 <button id="openModalBtn">Créer un groupe</button>
+<button id="openModalRappelBtn">Créer un rappel</button>
 <!-- dashboard.handlebars -->
 <table>
     <thead>
@@ -56,7 +57,32 @@
     </div>
 </div>
 
+<!-- newRappel.handlebars -->
+<div id="ModalCreateRappel" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModalRappelBtn">&times;</span>
+        <form action="/create-rappel" method="post">
+            <label for="name">Nom du rappel:</label>
+            <input type="text" id="name" name="name" placeholder="Entrez le nom du rappel" required>
 
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="Entrez la description du rappel" required></textarea>
+
+            <label for="dateheureecheance">Date et heure d'échéance:</label>
+            <input type="datetime-local" id="dateheureecheance" name="dateheureecheance" required>
+
+            <!-- Choisir le groupe -->
+            <label for="groupe">Groupe:</label>
+            <select id="groupe" name="groupe" required>
+                {{#each groups}}
+                    <option value="{{this.id}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+
+            <button type="submit">Créer le rappel</button>
+        </form>
+    </div>
+</div>
 
 <script src="/js/filter.js"></script>
 <script src="/js/dashboard.js"></script>

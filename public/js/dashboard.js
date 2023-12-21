@@ -29,3 +29,10 @@ confirmBtn.addEventListener('click', () => {
     modal.style.display = 'none';
 });
 
+document.getElementById('openModalRappelBtn').addEventListener('click', function () {
+    document.getElementById('ModalCreateRappel').style.display = 'block';
+});
+
+document.getElementById('closeModalRappelBtn').addEventListener('click', function () {
+    document.getElementById('ModalCreateRappel').style.display = 'none';
+});
