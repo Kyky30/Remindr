@@ -1,21 +1,21 @@
 <!-- dashboard.handlebars -->
 <button id="openModalBtn">Créer un groupe</button>
 <button id="openModalRappelBtn">Créer un rappel</button>
-<!-- dashboard.handlebars -->
-<table>
+
+<table id="groupSelectorTable">
     <thead>
         <tr>
             <th>Sélectionner par groupes</th>
         </tr>
     </thead>
     <tbody>
-        <tr id="viewAllRow">
+        <tr id="viewAllRow" class="selected-filter">
             <td>View All</td>
         </tr>
         {{#each groups}}
-        <tr class="groupRow" data-group-name="{{this.name}}">
-            <td>{{this.name}}</td>
-        </tr>
+            <tr class="groupRow" data-group-name="{{this.name}}">
+                <td>{{this.name}}</td>
+            </tr>
         {{/each}}
     </tbody>
 </table>
@@ -23,7 +23,6 @@
 <br>
 <br>
 
- <!-- dashboard.handlebars -->
 <table id="rappelsTable">
     <thead>
         <tr>
@@ -32,19 +31,18 @@
             <th>Date d'échéance</th>
         </tr>
     </thead>
-    {{#each groups}}
-    <tbody class="rappelGroup" data-group-name="{{this.name}}">
-        {{#each this.rappels}}
-            <tr data-date="{{this.dateecheance}}">
-                <td>{{this.name}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.dateecheance}}</td>
-            </tr>
+    <tbody class="rappelGroup">
+        {{#each groups}}
+            {{#each this.rappels}}
+                <tr data-date="{{this.dateecheance}}" data-group-name="{{../name}}">
+                    <td>{{this.name}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.dateecheance}}</td>
+                </tr>
+            {{/each}}
         {{/each}}
     </tbody>
-    {{/each}}
 </table>
-
 
 <div id="ModalCreateGroup" class="modal">
     <div class="modal-content">
@@ -57,7 +55,6 @@
     </div>
 </div>
 
-<!-- newRappel.handlebars -->
 <div id="ModalCreateRappel" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModalRappelBtn">&times;</span>
@@ -71,7 +68,6 @@
             <label for="dateheureecheance">Date et heure d'échéance:</label>
             <input type="datetime-local" id="dateheureecheance" name="dateheureecheance" required>
 
-            <!-- Choisir le groupe -->
             <label for="groupe">Groupe:</label>
             <select id="groupe" name="groupe" required>
                 {{#each groups}}

@@ -18,4 +18,8 @@ header h1 {
 
 .selected-filter {
   color: blue;
+}
+
+.expired {
+  background-color: red;
 }/*# sourceMappingURL=style.css.map */
