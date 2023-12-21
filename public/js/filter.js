@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const groupRows = document.querySelectorAll('.groupRow');
     const rappelsTable = document.getElementById('rappelsTable');
 
-    // Fonction pour trier les rappels par date d'échéance
+ // Fonction pour trier les rappels par date d'échéance
     function sortRappelsByDate(rappelGroup) {
         const rappels = Array.from(rappelGroup.children).sort((a, b) => {
             const dateAString = a.dataset.date;
@@ -26,34 +26,34 @@ document.addEventListener('DOMContentLoaded', function () {
             rappelGroup.appendChild(rappel); // Ajoute les rappels triés
         });
     }
+    
+  // Fonction pour mettre à jour le filtre
+  function updateFilter(groupName) {
+    // Logique pour mettre à jour le filtre selon le groupe sélectionné
+    // Vous pouvez implémenter votre propre logique ici
 
-    // Fonction pour mettre à jour le filtre
-    function updateFilter(groupName) {
-        // Logique pour mettre à jour le filtre selon le groupe sélectionné
-        // Vous pouvez implémenter votre propre logique ici
+    // Exemple: Afficher ou masquer les lignes de rappel en fonction du groupe
+    const allRappelGroups = document.querySelectorAll('.rappelGroup');
+    allRappelGroups.forEach(function (rappelGroup) {
+        if (groupName === 'View All' || rappelGroup.dataset.groupName === groupName) {
+            rappelGroup.style.display = 'table-row-group';
+            sortRappelsByDate(rappelGroup);
+            highlightOverdueRappels(rappelGroup);
+        } else {
+            rappelGroup.style.display = 'none';
+        }
+    });
 
-        // Exemple: Afficher ou masquer les lignes de rappel en fonction du groupe
-        const allRappelGroups = document.querySelectorAll('.rappelGroup');
-        allRappelGroups.forEach(function (rappelGroup) {
-            if (groupName === 'View All' || rappelGroup.dataset.groupName === groupName) {
-                rappelGroup.style.display = 'table-row-group';
-                sortRappelsByDate(rappelGroup);
-                highlightOverdueRappels(rappelGroup);
-            } else {
-                rappelGroup.style.display = 'none';
-            }
-        });
-
-        // Ajouter la classe selected-filter à l'élément actuellement sélectionné
-        // Supprimer la classe des autres éléments
-        groupRows.forEach(function (row) {
-            if (row.dataset.groupName === groupName) {
-                row.classList.add('selected-filter');
-            } else {
-                row.classList.remove('selected-filter');
-                viewAllRow.classList.remove('selected-filter');
-            }
-        });
+    // Ajouter la classe selected-filter à l'élément actuellement sélectionné
+    // Supprimer la classe des autres éléments
+    groupRows.forEach(function (row) {
+        if (row.dataset.groupName === groupName) {
+            row.classList.add('selected-filter');
+        } else {
+            row.classList.remove('selected-filter');
+            viewAllRow.classList.remove('selected-filter');
+        }
+    });
 
         // Ajouter la classe selected-filter à l'élément "View All" s'il est sélectionné
         // Retirer la classe si un autre filtre est sélectionné
