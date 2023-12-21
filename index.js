@@ -8,6 +8,8 @@ const passport = require('passport');
 const createGroupRoutes = require('./routes/newGroup'); // Importez le fichier newGroup.js
 const dashboardRoutes = require('./routes/dashboard'); // Importez le fichier dashboard.js
 const createRappelRoutes = require('./routes/newRappel'); // Importez le fichier newRappel.js
+const updateRappelRouter = require('./routes/updateRappel'); // Importez le fichier updateRappel.js
+const deleteRappelRouter = require('./routes/deleteRappel'); // Importez le fichier deleteRappel.js
 const { router: authRoutes, checkAuth } = require('./routes/auth');
 
 
@@ -36,6 +38,8 @@ app.use('/', authRoutes);
 app.use('/creategroup', createGroupRoutes);
 app.use('/dashboard',checkAuth , dashboardRoutes);
 app.use('/create-rappel', createRappelRoutes);
+app.use('/update-rappel', updateRappelRouter);
+app.use('/delete-rappel', deleteRappelRouter);
 
 // Authentification GitHub
 app.get('/auth/github', passport.authenticate('github'));

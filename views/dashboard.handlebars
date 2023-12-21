@@ -31,17 +31,24 @@
             <th>Date d'échéance</th>
         </tr>
     </thead>
-    <tbody class="rappelGroup">
-        {{#each groups}}
-            {{#each this.rappels}}
-                <tr data-date="{{this.dateecheance}}" data-group-name="{{../name}}">
-                    <td>{{this.name}}</td>
-                    <td>{{this.description}}</td>
-                    <td>{{this.dateecheance}}</td>
-                </tr>
-            {{/each}}
+    {{#each groups}}
+    <tbody class="rappelGroup" data-group-name="{{this.name}}">
+        {{#each this.rappels}}
+            <tr data-rappel-id="{{this.id}}">
+                <td>{{this.name}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.dateecheance}}</td>
+                <td>{{this.heureecheance}}</td>
+                <td>
+                    <button class="editBtn">Modifier</button>
+                    <button class="deleteBtn">Supprimer</button>
+                    <button class="saveBtn" style="display: none;">Valider</button>
+                    <button class="cancelBtn" style="display: none;">Annuler</button>
+                </td>
+            </tr>
         {{/each}}
     </tbody>
+{{/each}}
 </table>
 
 <div id="ModalCreateGroup" class="modal">
