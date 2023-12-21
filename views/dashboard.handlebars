@@ -1,18 +1,51 @@
 <!-- dashboard.handlebars -->
 <button id="openModalBtn">Créer un groupe</button>
-    <table>
-        <thead>
+<!-- dashboard.handlebars -->
+<table>
+    <thead>
+        <tr>
+            <th>Sélectionner par groupes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="viewAllRow">
+            <td>View All</td>
+        </tr>
+        {{#each groups}}
+        <tr class="groupRow" data-group-name="{{this.name}}">
+            <td>{{this.name}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<br>
+<br>
+
+ <!-- dashboard.handlebars -->
+<table id="rappelsTable">
+    <thead>
+        <tr>
+            <th>Rappel</th>
+            <th>Description</th>
+            <th>Date d'échéance</th>
+        </tr>
+    </thead>
+    {{#each groups}}
+    <tbody class="rappelGroup" data-group-name="{{this.name}}">
+        {{#each this.rappels}}
             <tr>
-                <th>Sélectionner par groupes</th>
+                <td>{{this.name}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.dateecheance}}</td>
+                <td>{{this.heureecheance}}</td>
             </tr>
-        </thead>
-        <tbody>
-            {{#each groups}}
-            <tr>
-                <td><a href="/group/{{this.id}}">{{this.name}}</a></td>
-            </tr>
-            {{/each}}
-    </table>
+        {{/each}}
+    </tbody>
+    {{/each}}
+</table>
+
+
 <div id="ModalCreateGroup" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModalBtn">&times;</span>
@@ -24,4 +57,7 @@
     </div>
 </div>
 
+
+
+<script src="/js/filter.js"></script>
 <script src="/js/dashboard.js"></script>

@@ -32,23 +32,6 @@ passport.use(new GitHubStrategy({
   return done(null, profile);
 }));
 
-// passport.serializeUser((user, done) => {
-//   done(null, user ? user.id : null);
-// });
-
-
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: { id: parseInt(id, 10) },
-//     });
-
-//     done(null, user);
-//   } catch (error) {
-//     done(error, null);
-//   }
-// });
-
 // Sérialisation de l'utilisateur
 passport.serializeUser((user, done) => {
   done(null, user);

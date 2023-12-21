@@ -44,7 +44,7 @@ model Rappel {
   name          String
   description   String    
   groupeId      Int
-  dateecheance  DateTime
-  heureecheance DateTime
+  dateecheance  DateTime  @db.Date
+  heureecheance DateTime  @db.Time
   groupe        Groupe    @relation(fields: [groupeId], references: [id])
 }

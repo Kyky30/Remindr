@@ -28,3 +28,4 @@ confirmBtn.addEventListener('click', () => {
     console.log('Text input value:', textInputValue);
     modal.style.display = 'none';
 });
+

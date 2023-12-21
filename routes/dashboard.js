@@ -6,6 +6,29 @@ const { checkAuth } = require('./auth'); // Adjust the path accordingly
 
 const router = express.Router();
 
+// router.get('/', checkAuth, async (req, res) => {
+//     try {
+//         // Ensure that req.user is defined and has an id property
+//         if (!req.user || !req.user.id) {
+//             return res.status(401).send('Unauthorized');
+//         }
+
+//         const user = await prisma.user.findUnique({
+//             where: { id: req.user.id },
+//             include: { GroupeMember: { include: { groupe: true } } },
+//         });
+
+//         if (!user) {
+//             return res.status(404).send('User not found');
+//         }
+
+//         res.render('dashboard', { user: req.user.username, groups: user.GroupeMember.map(member => member.groupe) });
+//     } catch (error) {
+//         console.error('Error fetching user groups:', error);
+//         res.status(500).send('Inernal Server Error');
+//     }
+// });
+
 router.get('/', checkAuth, async (req, res) => {
     try {
         // Ensure that req.user is defined and has an id property
@@ -15,17 +38,32 @@ router.get('/', checkAuth, async (req, res) => {
 
         const user = await prisma.user.findUnique({
             where: { id: req.user.id },
-            include: { GroupeMember: { include: { groupe: true } } },
+            include: {
+                GroupeMember: {
+                    include: {
+                        groupe: {
+                            include: {
+                                Rappel: true, // Include Rappel for each Groupe
+                            },
+                        },
+                    },
+                },
+            },
         });
 
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        res.render('dashboard', { user: req.user.username, groups: user.GroupeMember.map(member => member.groupe) });
+        const userGroups = user.GroupeMember.map((member) => {
+            const groupWithRappels = { ...member.groupe, rappels: member.groupe.Rappel };
+            return groupWithRappels;
+        });
+
+        res.render('dashboard', { user: req.user.username, groups: userGroups });
     } catch (error) {
         console.error('Error fetching user groups:', error);
-        res.status(500).send('Inernal Server Error');
+        res.status(500).send('Internal Server Error');
     }
 });
 
