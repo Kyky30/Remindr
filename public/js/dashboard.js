@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.querySelector('td:nth-child(2)').textContent = description;
                 row.querySelector('td:nth-child(3)').textContent = dateecheance;
 
+                
                 this.style.display = 'none';
                 row.querySelector('.editBtn').style.display = 'inline-block';
                 row.querySelector('.deleteBtn').style.display = 'inline-block';
@@ -146,4 +147,66 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+});
+
+
+
+
+// Récupération des éléments DOM pour le modal Ajouter un utilisateur
+const openAddUserModalBtn = document.getElementById('openAddUserModalBtn');
+const addUserModal = document.getElementById('AddUserModal');
+const closeAddUserModalBtn = document.getElementById('closeAddUserModalBtn');
+const addUserForm = document.getElementById('addUserForm');
+
+// Afficher le modal Ajouter un utilisateur
+openAddUserModalBtn.addEventListener('click', () => {
+    addUserModal.style.display = 'block';
+    
+});
+
+// Fermer le modal en cliquant sur la croix
+closeAddUserModalBtn.addEventListener('click', () => {
+    addUserModal.style.display = 'none';
+});
+
+// Fermer le modal en cliquant en dehors du modal
+window.addEventListener('click', (event) => {
+    if (event.target === addUserModal) {
+        addUserModal.style.display = 'none';
+    }
+});
+
+// Envoyer le formulaire Ajouter un utilisateur
+addUserForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const groupId = addUserForm.elements.selectGroup.value;
+    const userId = addUserForm.elements.selectUser.value;
+
+    // Ajoutez ici la logique pour ajouter l'utilisateur au groupe
+    try {
+        await fetch(`/add-user-to-group/${groupId}/${userId}`, {
+            method: 'POST',
+        });
+
+        // Mettez à jour la vue côté client (facultatif)
+        // Ajoutez ici la logique pour mettre à jour votre interface utilisateur
+        console.log('Utilisateur ajouté au groupe avec succès.');
+
+        // Fermez le modal Ajouter un utilisateur
+        addUserModal.style.display = 'none';
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout de l\'utilisateur au groupe:', error);
+    }
+});
+
+
+
+
+document.getElementById('openModalAddUserBtn').addEventListener('click', function () {
+    document.getElementById('ModalAddUser').style.display = 'block';
+});
+
+document.getElementById('closeModalAddUserBtn').addEventListener('click', function () {
+    document.getElementById('ModalAddUser').style.display = 'none';
 });

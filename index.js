@@ -5,6 +5,8 @@ const path = require('path');
 const sessionConfig = require('./session'); // Importez le fichier session.js
 const passport = require('passport');
 
+const bodyParser = require('body-parser');  
+
 const createGroupRoutes = require('./routes/newGroup'); // Importez le fichier newGroup.js
 const dashboardRoutes = require('./routes/dashboard'); // Importez le fichier dashboard.js
 const createRappelRoutes = require('./routes/newRappel'); // Importez le fichier newRappel.js
@@ -40,6 +42,9 @@ app.use('/dashboard',checkAuth , dashboardRoutes);
 app.use('/create-rappel', createRappelRoutes);
 app.use('/update-rappel', updateRappelRouter);
 app.use('/delete-rappel', deleteRappelRouter);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Authentification GitHub
 app.get('/auth/github', passport.authenticate('github'));

@@ -1,6 +1,7 @@
 <!-- dashboard.handlebars -->
 <button id="openModalBtn">Créer un groupe</button>
 <button id="openModalRappelBtn">Créer un rappel</button>
+<button id="openAddUserModalBtn">Ajouter un utilisateur</button>
 
 <table id="groupSelectorTable">
     <thead>
@@ -84,6 +85,28 @@
 
             <button type="submit">Créer le rappel</button>
         </form>
+    </div>
+</div>
+
+
+<!-- addUserModal.handlebars -->
+<div id="AddUserModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeAddUserModalBtn">&times;</span>
+            <form action="/dashboard/add-user-to-group" method="post">
+                <!-- ... autres champs du formulaire ... -->
+                <label for="selectGroup">Sélectionner le groupe :</label>
+                <select id="selectGroup" name="selectGroup" required>
+                    {{#each groups}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+
+                <label for="userPseudo">Pseudo de l'utilisateur à ajouter :</label>
+                <input type="text" id="userPseudo" name="userPseudo" placeholder="Entrez le pseudo de l'utilisateur" required>
+
+                <button type="submit">Ajouter l'utilisateur</button>
+            </form>
     </div>
 </div>
 
