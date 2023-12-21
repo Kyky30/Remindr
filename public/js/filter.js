@@ -5,11 +5,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fonction pour trier les rappels par date d'échéance
     function sortRappelsByDate(rappelGroup) {
-        const rappels = Array.from(rappelGroup.children).sort((b, a) => {
-            const dateA = Date(a.dataset.dateecheance);
-            const dateB = Date(b.dataset.dateecheance);
-            console.log(dateA, dateB);
-            return dateA - dateB;
+        const rappels = Array.from(rappelGroup.children).sort((a, b) => {
+            const dateAString = a.dataset.date;
+            const dateBString = b.dataset.date;
+
+            if (dateAString && dateBString) {
+                const dateA = new Date(dateAString);
+                const dateB = new Date(dateBString);
+
+                return dateA - dateB;
+            } else {
+                console.error('Attribut data-date manquant:', a, b);
+                return 0;
+            }
         });
 
         rappelGroup.innerHTML = ''; // Vide la liste actuelle
@@ -61,16 +69,26 @@ document.addEventListener('DOMContentLoaded', function () {
         const today = new Date();
 
         Array.from(rappelGroup.children).forEach((rappel) => {
-            const dateecheance = Date(rappel.dataset.dateecheance);
+            const dateString = rappel.dataset.date;
+            console.log(dateString);
 
-            if (dateecheance < today) {
-                row.style.backgroundColor = 'red';
+            if (dateString) {
+                const dateecheance = new Date(dateString);
+
+                if (!isNaN(dateecheance)) {
+                    if (dateecheance < today) {
+                        rappel.style.backgroundColor = 'red';
+                    } else {
+                        rappel.style.backgroundColor = ''; // Réinitialise la couleur de fond
+                    }
+                } else {
+                    console.error('Date invalide:', dateString);
+                }
             } else {
-                row.style.backgroundColor = ''; // Réinitialise la couleur de fond
+                console.error('Attribut data-date manquant:', rappel);
             }
         });
     }
-
 
     // Initialise la page avec "View All" en bleu et sans texte de filtre
     updateFilter('View All');
@@ -79,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
     groupRows.forEach(function (row) {
         row.addEventListener('click', function () {
             const groupName = row.dataset.groupName;
+            console.log(row.dataset.groupName);
             updateFilter(groupName);
         });
     });
@@ -91,38 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
             rappelGroup.style.display = 'table-row-group';
             sortRappelsByDate(rappelGroup);
             highlightOverdueRappels(rappelGroup);
-        });    function highlightOverdueRappels(rappelGroup) {
-            const today = new Date();
-    
-            Array.from(rappelGroup.children).forEach((rappel) => {
-                const dateecheance = Date(rappel.dataset.dateecheance);
-    
-                console.log(rappel.dataset);
-                console.log(dateecheance < today);
-                if (dateecheance < today) {
-                    rappel.style.backgroundColor = 'red';
-                } else {
-                    rappel.style.backgroundColor = ''; // Réinitialise la couleur de fond
-                }
-            });
-        }
-        function highlightOverdueRappels(rappelGroup) {
-            const today = new Date();
-    
-            Array.from(rappelGroup.children).forEach((rappel) => {
-                const dateecheance = Date(rappel.dataset.dateecheance);
-    
-                console.log(rappel.dataset);
-                console.log(dateecheance < today);
-                const row = rappel.closest('tr');
-                if (dateecheance < today) {
-                    row.style.backgroundColor = 'red';
-                } else {
-                    row.style.backgroundColor = ''; // Réinitialise la couleur de fond
-                }
-            });
-        }
-        
+        });
         updateFilter('View All');
     });
 });

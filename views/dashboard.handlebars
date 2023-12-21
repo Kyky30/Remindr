@@ -34,7 +34,7 @@
     {{#each groups}}
     <tbody class="rappelGroup" data-group-name="{{this.name}}">
         {{#each this.rappels}}
-            <tr>
+            <tr data-date="{{this.dateecheance}}">
                 <td>{{this.name}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.dateecheance}}</td>
