@@ -102,12 +102,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.querySelector('td:nth-child(2)').textContent = description;
                 row.querySelector('td:nth-child(3)').textContent = dateecheance;
 
-                deactivateEditMode(row);
                 this.style.display = 'none';
                 row.querySelector('.editBtn').style.display = 'inline-block';
                 row.querySelector('.deleteBtn').style.display = 'inline-block';
                 row.querySelector('.saveBtn').style.display = 'none';
                 row.querySelector('.cancelBtn').style.display = 'none';
+
+                deactivateEditMode(row);
             } catch (error) {
                 console.error('Error updating rappel:', error);
             }
